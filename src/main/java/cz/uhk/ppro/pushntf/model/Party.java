@@ -26,12 +26,15 @@ public class Party {
     private String partyId;
 
     @Column(name = "ico", length = 8)
+    @Schema(type = "string", example = "60916427")
     private String ico;
 
     @Column(name = "firstname")
+    @Schema(type = "string", example = "John")
     private String firstName;
 
     @Column(name = "lastname")
+    @Schema(type = "string", example = "Doe")
     private String lastName;
 
     @Column(name = "reg_status")
@@ -40,6 +43,7 @@ public class Party {
 
     @Column(name = "created")
     @CreationTimestamp
+    @Hidden
     private LocalDateTime createdOn;
 
     public enum Status {

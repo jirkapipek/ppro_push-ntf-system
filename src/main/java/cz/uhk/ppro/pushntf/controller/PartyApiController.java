@@ -27,12 +27,13 @@ public class PartyApiController implements PartyApi {
 
         Party party = repository.findByPartyId(uuid)
                 .orElseThrow(() -> new NotFoundException("Party with this UUID id not found"));
-
+        log.info("Returned party with UUID " +uuid);
         return ResponseEntity.ok().body(party);
     }
 
     @Override
     public Collection<Party> findParties() {
+        log.info("Returned " +repository.findAll().size()+ " parties");
         return repository.findAll();
     }
 
@@ -41,6 +42,7 @@ public class PartyApiController implements PartyApi {
         if(party.getPartyId() == uuid) {
             Party oldParty = repository.findByPartyId(uuid)
                     .orElseThrow(() -> new NotFoundException("Party with this UUID id not found"));
+            log.info("Party with UUID " +uuid+ " has been updated");
             return repository.save(party);
         }
         else throw new NotMatchException("UUID in URL not match URL in body");
@@ -52,12 +54,14 @@ public class PartyApiController implements PartyApi {
         if(repository.findByPartyId(body.getPartyId()).isPresent() == true){
             throw new ObjectExistsException("Entity with this UUID exists, if you want update, use PUT");
         }
+        log.info("Party with UUID " +body.getPartyId()+ " has been created");
         return new ResponseEntity<Party>(repository.save(body), HttpStatus.CREATED);
     }
 
     @Override
 
     public long deleteParty(String uuid) throws Exception {
+        log.info("Party with UUID " +uuid+ " has been deleted");
         repository.deleteByPartyId(uuid);
         return 0;
     }
