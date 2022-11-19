@@ -1,7 +1,13 @@
 package cz.uhk.ppro.pushntf.model;
 
+import io.swagger.v3.oas.annotations.Hidden;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 
@@ -15,13 +21,9 @@ import java.util.UUID;
 public class Party {
 
     @Id
-    @SequenceGenerator(name = "partyEntitySeq", sequenceName = "SEQ_PARTIES", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "party")
-    @Column(name = "id")
-    private Long id;
-
-    @Column(name = "party_id")
-    private UUID partyId;
+    @Column(name = "party_id", unique=true)
+    @Schema( type = "string", example = "5567d933-5d2a-46e3-a58e-34d614e9bdec")
+    private String partyId;
 
     @Column(name = "ico", length = 8)
     private String ico;
@@ -35,6 +37,10 @@ public class Party {
     @Column(name = "reg_status")
     @Enumerated(EnumType.ORDINAL)
     private Status regStatus;
+
+    @Column(name = "created")
+    @CreationTimestamp
+    private LocalDateTime createdOn;
 
     public enum Status {
         REGISTERED, UNREGISTERED, DELETED
