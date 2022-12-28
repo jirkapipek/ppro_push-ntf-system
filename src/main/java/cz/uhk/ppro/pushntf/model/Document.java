@@ -24,8 +24,8 @@ import java.time.LocalDateTime;
 public class Document {
 
     @Id
-    @Column(name = "document_id", unique=true)
-    @Schema( type = "string", example = "5567d933-5d2a-46e3-a58e-34d614e9bdec")
+    @Column(name = "document_id", unique = true)
+    @Schema(type = "string", example = "5567d933-5d2a-46e3-a58e-34d614e9bdeb")
     private String documentId;
 
     @Column(name = "formatCode")

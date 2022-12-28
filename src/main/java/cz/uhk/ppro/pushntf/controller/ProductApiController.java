@@ -26,46 +26,48 @@ public class ProductApiController implements ProductApi {
 
         Product product = repository.findByProductId(uuid)
                 .orElseThrow(() -> new NotFoundException("Product with this UUID id not found"));
-        log.info("Returned product with UUID " +uuid);
+        log.info("Returned product with UUID " + uuid);
         return ResponseEntity.ok().body(product);
     }
 
     @Override
     public Collection<Product> findProducts() {
-        log.info("Returned " +repository.findAll().size()+ " parties");
+        log.info("Returned " + repository.findAll().size() + " parties");
         return repository.findAll();
     }
 
     @Override
-    public Product updateProduct(String uuid, Product product) throws Exception  {
-        System.out.println(product.getProductId() +"\n");
+    public Product updateProduct(String uuid, Product product) throws Exception {
+        System.out.println(product.getProductId() + "\n");
         System.out.println(uuid);
-        if (product.getProductId() != null && !product.getProductId().equals(uuid)) throw new NotMatchException("UUID in URL not match URL in body");
+        if (product.getProductId() != null && !product.getProductId().equals(uuid))
+            throw new NotMatchException("UUID in URL not match URL in body");
         Product productDb = repository.findByProductId(uuid).orElseThrow(() -> new NotFoundException("Product with this UUID id not found"));
         if (product.getProductCode() != null) productDb.setProductCode(product.getProductCode());
         if (product.getProductName() != null) productDb.setProductName(product.getProductName());
         if (product.getPrice() != null) productDb.setPrice(product.getPrice());
         if (product.getCurrency() != null) productDb.setCurrency(product.getCurrency());
 
-        log.info("Product with UUID " +uuid+ " has been updated");
+        log.info("Product with UUID " + uuid + " has been updated");
         return repository.save(productDb);
     }
 
     @Override
     public ResponseEntity<Product> createProduct(Product body) throws Exception {
 
-        if(repository.findByProductId(body.getProductId()).isPresent() == true){
+        if (repository.findByProductId(body.getProductId()).isPresent() == true) {
             throw new ObjectExistsException("Entity with this UUID exists, if you want update, use PUT");
         }
-        log.info("Product with UUID " +body.getProductId()+ " has been created");
+        log.info("Product with UUID " + body.getProductId() + " has been created");
         return new ResponseEntity<Product>(repository.save(body), HttpStatus.CREATED);
     }
 
     @Override
 
     public long deleteProduct(String uuid) throws Exception {
-        log.info("Product with UUID " +uuid+ " has been deleted");
+        repository.findByProductId(uuid).orElseThrow(() -> new NotFoundException("Product with this UUID id not found"));
         repository.deleteByProductId(uuid);
-        return 0;
+        log.info("Product with UUID " + uuid + " has been deleted");
+        return 1;
     }
 }

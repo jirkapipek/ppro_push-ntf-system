@@ -27,46 +27,48 @@ public class PartyApiController implements PartyApi {
 
         Party party = repository.findByPartyId(uuid)
                 .orElseThrow(() -> new NotFoundException("Party with this UUID id not found"));
-        log.info("Returned party with UUID " +uuid);
+        log.info("Returned party with UUID " + uuid);
         return ResponseEntity.ok().body(party);
     }
 
     @Override
     public Collection<Party> findParties() {
-        log.info("Returned " +repository.findAll().size()+ " parties");
+        log.info("Returned " + repository.findAll().size() + " parties");
         return repository.findAll();
     }
 
     @Override
-    public Party updateParty(String uuid, Party party) throws Exception  {
-        System.out.println(party.getPartyId() +"\n");
+    public Party updateParty(String uuid, Party party) throws Exception {
+        System.out.println(party.getPartyId() + "\n");
         System.out.println(uuid);
-        if (party.getPartyId() != null && !party.getPartyId().equals(uuid)) throw new NotMatchException("UUID in URL not match URL in body");
+        if (party.getPartyId() != null && !party.getPartyId().equals(uuid))
+            throw new NotMatchException("UUID in URL not match URL in body");
         Party partyDb = repository.findByPartyId(uuid).orElseThrow(() -> new NotFoundException("Party with this UUID id not found"));
         if (party.getFirstName() != null) partyDb.setFirstName(party.getFirstName());
         if (party.getLastName() != null) partyDb.setLastName(party.getLastName());
         if (party.getIco() != null) partyDb.setIco(party.getIco());
         if (party.getRegStatus() != null) partyDb.setRegStatus(party.getRegStatus());
 
-        log.info("Party with UUID " +uuid+ " has been updated");
+        log.info("Party with UUID " + uuid + " has been updated");
         return repository.save(partyDb);
     }
 
     @Override
     public ResponseEntity<Party> createParty(Party body) throws Exception {
 
-        if(repository.findByPartyId(body.getPartyId()).isPresent() == true){
+        if (repository.findByPartyId(body.getPartyId()).isPresent() == true) {
             throw new ObjectExistsException("Entity with this UUID exists, if you want update, use PUT");
         }
-        log.info("Party with UUID " +body.getPartyId()+ " has been created");
+        log.info("Party with UUID " + body.getPartyId() + " has been created");
         return new ResponseEntity<Party>(repository.save(body), HttpStatus.CREATED);
     }
 
     @Override
 
     public long deleteParty(String uuid) throws Exception {
-        log.info("Party with UUID " +uuid+ " has been deleted");
+        repository.findByPartyId(uuid).orElseThrow(() -> new NotFoundException("Party with this UUID id not found"));
         repository.deleteByPartyId(uuid);
+        log.info("Party with UUID " + uuid + " has been deleted");
         return 0;
     }
 }

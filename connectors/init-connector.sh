@@ -13,8 +13,8 @@ curl -X PUT -H "Content-Type: application/JSON" --data '{
   "value.converter.schemas.enable": "false",
   "key.converter": "org.apache.kafka.connect.json.JsonConverter",
   "value.converter": "org.apache.kafka.connect.json.JsonConverter",
-  "table.include.list": "ppro.party",
-  "topic.prefix": "connector"
+  "table.include.list": "ppro.party,ppro.document,ppro.investment,ppro.product",
+  "topic.prefix": "push-ntf"
 }}}' http://connect:8083/connectors/cdc-connector/config
 
 exit

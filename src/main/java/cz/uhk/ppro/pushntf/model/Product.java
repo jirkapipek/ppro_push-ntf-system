@@ -24,7 +24,7 @@ public class Product {
 
     @Id
     @Column(name = "product_id", unique=true)
-    @Schema( type = "string", example = "5567d933-5d2a-46e3-a58e-34d614e9bdec")
+    @Schema( type = "string", example = "5567d933-5d2a-46e3-a58e-34d614e9bded")
     private String productId;
 
     @Column(name = "product_code", length = 9)

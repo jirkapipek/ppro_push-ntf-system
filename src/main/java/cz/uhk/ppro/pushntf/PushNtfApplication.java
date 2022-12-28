@@ -10,8 +10,8 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 @Log4j2
 public class PushNtfApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(PushNtfApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(PushNtfApplication.class, args);
+    }
 
 }
