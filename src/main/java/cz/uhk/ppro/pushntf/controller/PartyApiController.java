@@ -41,14 +41,15 @@ public class PartyApiController implements PartyApi {
     public Party updateParty(String uuid, Party party) throws Exception  {
         System.out.println(party.getPartyId() +"\n");
         System.out.println(uuid);
-        System.out.println(party.getPartyId().equals(uuid));
-        if(party.getPartyId().equals(uuid)) {
-            Party oldParty = repository.findByPartyId(uuid)
-                    .orElseThrow(() -> new NotFoundException("Party with this UUID id not found"));
-            log.info("Party with UUID " +uuid+ " has been updated");
-            return repository.save(party);
-        }
-        else throw new NotMatchException("UUID in URL not match URL in body");
+        if (party.getPartyId() != null && !party.getPartyId().equals(uuid)) throw new NotMatchException("UUID in URL not match URL in body");
+        Party partyDb = repository.findByPartyId(uuid).orElseThrow(() -> new NotFoundException("Party with this UUID id not found"));
+        if (party.getFirstName() != null) partyDb.setFirstName(party.getFirstName());
+        if (party.getLastName() != null) partyDb.setLastName(party.getLastName());
+        if (party.getIco() != null) partyDb.setIco(party.getIco());
+        if (party.getRegStatus() != null) partyDb.setRegStatus(party.getRegStatus());
+
+        log.info("Party with UUID " +uuid+ " has been updated");
+        return repository.save(partyDb);
     }
 
     @Override

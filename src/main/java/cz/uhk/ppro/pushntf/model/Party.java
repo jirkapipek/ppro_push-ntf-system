@@ -5,6 +5,8 @@ import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -19,6 +21,8 @@ import java.util.UUID;
 @ToString
 @Getter
 @Setter
+@DynamicInsert
+@DynamicUpdate
 public class Party {
 
     @Id
@@ -42,7 +46,7 @@ public class Party {
     @Enumerated(EnumType.STRING)
     private Status regStatus;
 
-    @Column(name = "created")
+    @Column(name = "created", nullable = false, updatable = false)
     @CreationTimestamp
     @Hidden
     private LocalDateTime createdOn;

@@ -33,12 +33,8 @@ public class OpenApiConfig {
                 .security(Arrays.asList(
                         new SecurityRequirement().addList("spring_oauth")))
                 .info(new Info()
-                        .title("Book Application API")
-                        .description("This is a sample Spring Boot RESTful service using springdoc-openapi and OpenAPI 3.")
-                        .termsOfService("terms")
-                        .contact(new Contact().email("codersitedev@gmail.com").name("Developer: Moises Gamio"))
-                        .license(new License().name("GNU"))
-                        .version("2.0")
+                        .title("PPRO demo REST API")
+                        .contact(new Contact().email("jirka.pipek@gmail.com").name("Jiří Pipek"))
                 );
     }
 }
