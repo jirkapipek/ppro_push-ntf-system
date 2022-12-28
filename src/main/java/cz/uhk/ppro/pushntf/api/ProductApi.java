@@ -33,7 +33,7 @@ public interface ProductApi {
             @PathVariable String uuid)
             throws Exception;
 
-    @Operation(summary = "List all parties", description = "Returns a product collection", tags = { "product" })
+    @Operation(summary = "List all products", description = "Returns a product collection", tags = { "product" })
     @GetMapping("/")
     @ResponseStatus(HttpStatus.OK)
     public Collection<Product> findProducts();
