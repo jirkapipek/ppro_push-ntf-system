@@ -4,7 +4,7 @@ FROM openjdk:11.0-jdk
 ARG APP_HOME=/usr/app
 
 COPY target/*.jar ${APP_HOME}/push-ntf-system.jar
-COPY src/main/resources/application.properties /config/application.properties
+COPY src/main/resources/application-docker.properties /config/application.properties
 
 EXPOSE 8080
 

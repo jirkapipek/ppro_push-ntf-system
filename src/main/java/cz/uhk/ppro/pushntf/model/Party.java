@@ -39,7 +39,7 @@ public class Party {
     private String lastName;
 
     @Column(name = "reg_status")
-    @Enumerated(EnumType.ORDINAL)
+    @Enumerated(EnumType.STRING)
     private Status regStatus;
 
     @Column(name = "created")

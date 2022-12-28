@@ -7,4 +7,5 @@ This is the school project for "Pokročilé programování"
 Postup:
 
 1) mvn clean install - na úrovni root adresáře projektu
-2) ```docker-compose -p ppro up``` | pro build aplikace s každým spuštením ```docker-compose -p ppro up --build push-ntf-system``` 
+2) ```docker-compose -p ppro build```
+3) ```docker-compose -p ppro up```

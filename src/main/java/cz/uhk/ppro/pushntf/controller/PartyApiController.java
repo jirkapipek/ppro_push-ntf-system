@@ -39,7 +39,10 @@ public class PartyApiController implements PartyApi {
 
     @Override
     public Party updateParty(String uuid, Party party) throws Exception  {
-        if(party.getPartyId() == uuid) {
+        System.out.println(party.getPartyId() +"\n");
+        System.out.println(uuid);
+        System.out.println(party.getPartyId().equals(uuid));
+        if(party.getPartyId().equals(uuid)) {
             Party oldParty = repository.findByPartyId(uuid)
                     .orElseThrow(() -> new NotFoundException("Party with this UUID id not found"));
             log.info("Party with UUID " +uuid+ " has been updated");
