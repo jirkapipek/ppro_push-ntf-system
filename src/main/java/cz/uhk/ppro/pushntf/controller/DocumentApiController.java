@@ -3,11 +3,14 @@ package cz.uhk.ppro.pushntf.controller;
 import cz.uhk.ppro.pushntf.api.DocumentApi;
 import cz.uhk.ppro.pushntf.exception.NotFoundException;
 import cz.uhk.ppro.pushntf.exception.NotMatchException;
+import cz.uhk.ppro.pushntf.exception.NotValidException;
 import cz.uhk.ppro.pushntf.exception.ObjectExistsException;
 import cz.uhk.ppro.pushntf.model.Document;
 import cz.uhk.ppro.pushntf.model.Party;
-import cz.uhk.ppro.pushntf.repository.DocumentRepository;
 import cz.uhk.ppro.pushntf.repository.PartyRepository;
+import cz.uhk.ppro.pushntf.service.DocumentService;
+import cz.uhk.ppro.pushntf.service.PartyService;
+import cz.uhk.ppro.pushntf.utils.UUIDValidator;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,37 +24,50 @@ import java.util.Collection;
 public class DocumentApiController implements DocumentApi {
 
     @Autowired
-    private DocumentRepository documentRepository;
+    private DocumentService documentService;
     @Autowired
-    private PartyRepository partyRepository;
+    private PartyService partyService;
 
+    @Autowired
+    private UUIDValidator validator;
     @Override
     public ResponseEntity<Document> findByUuid(String uuid) throws Exception {
 
-        Document document = documentRepository.findByDocumentId(uuid)
-                .orElseThrow(() -> new NotFoundException("Document with this UUID id not found"));
+
+        Document document = documentService.findByUUID(uuid);
+
+        if (document == null)
+            throw new NotFoundException("Document with this UUID id not found");
+
         log.info("Returned document with UUID " + uuid);
+
         return ResponseEntity.ok().body(document);
     }
 
     @Override
     public Collection<Document> findDocuments() {
-        log.info("Returned " + documentRepository.findAll().size() + " parties");
-        return documentRepository.findAll();
+        log.info("Returned " + documentService.findAll().size() + " parties");
+        return documentService.findAll();
     }
 
     @Override
     public Document updateDocument(String uuid, Document document) throws Exception {
-        System.out.println(document.getDocumentId() + "\n");
-        System.out.println(uuid);
+
         if (document.getDocumentId() != null && !document.getDocumentId().equals(uuid))
             throw new NotMatchException("UUID in URL not match URL in body");
-        Document documentDb = documentRepository.findByDocumentId(uuid).orElseThrow(() -> new NotFoundException("Document with this UUID id not found"));
+
+        Document documentDb = documentService.findByUUID(uuid);
+
+        if (documentDb == null)
+            throw new NotFoundException("Document with this UUID id not found");
 
         if (document.getDocumentLanguage() != null) documentDb.setDocumentLanguage(document.getDocumentLanguage());
         if (document.getOwner() != null) {
+            if (partyService.findByUUID(document.getOwner().getPartyId()) == null)
+                throw new NotFoundException("Owner with this " + document.getOwner().getPartyId() + " partyId not found");
+
             documentDb.setOwner(document.getOwner());
-            partyRepository.findByPartyId(document.getOwner().getPartyId()).orElseThrow(() -> new NotFoundException("Owner with this " + document.getOwner().getPartyId() + " partyId not found"));
+
         }
 
         if (document.getDescription() != null) documentDb.setDescription(document.getDescription());
@@ -59,27 +75,34 @@ public class DocumentApiController implements DocumentApi {
         if (document.getFormat() != null) documentDb.setFormat(document.getFormat());
 
         log.info("Document with UUID " + uuid + " has been updated");
-        return documentRepository.save(documentDb);
+        return documentService.update(documentDb);
     }
 
     @Override
     public ResponseEntity<Document> createDocument(Document body) throws Exception {
 
-        if (documentRepository.findByDocumentId(body.getDocumentId()).isPresent() == true) {
+        if(!validator.isUuidStringValid(body.getDocumentId())) throw new NotValidException("UUID is not valid");
+
+        if (documentService.findByUUID(body.getDocumentId()) != null)
             throw new ObjectExistsException("Entity with this UUID exists, if you want update, use PUT");
-        }
-        Party partyDb = partyRepository.findByPartyId(body.getOwner().getPartyId()).orElseThrow(() -> new NotFoundException("Owner with this " + body.getOwner().getPartyId() + " partyId not found"));
+
+        if (partyService.findByUUID(body.getOwner().getPartyId()) == null)
+            throw new NotFoundException("Owner with this " + body.getOwner().getPartyId() + " partyId not found");
 
         log.info("Document with UUID " + body.getDocumentId() + " has been created");
-        return new ResponseEntity<Document>(documentRepository.save(body), HttpStatus.CREATED);
+
+        return new ResponseEntity<Document>(documentService.create(body), HttpStatus.CREATED);
     }
 
     @Override
 
     public long deleteDocument(String uuid) throws Exception {
-        documentRepository.findByDocumentId(uuid).orElseThrow(() -> new NotFoundException("Document with this UUID id not found"));
-        documentRepository.deleteByDocumentId(uuid);
+        if (documentService.findByUUID(uuid) == null)
+            throw new NotFoundException("Document with this UUID id not found");
+
+        documentService.deleteByUUID(uuid);
         log.info("Document with UUID " + uuid + " has been deleted");
+
         return 1;
     }
 }

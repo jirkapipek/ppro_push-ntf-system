@@ -28,9 +28,9 @@ class DocumentRepositoryTest {
         documentRepositoryTest.save(document);
 
         //when
-        Document expected = documentRepositoryTest.findByDocumentId(uuid).get();
+        Document expected = documentRepositoryTest.findByDocumentId(uuid);
         //then
-        assertThat(uuid).isEqualTo(expected.getDocumentId());
+        assertThat(expected).isNotNull();
     }
 
     @Test
@@ -42,9 +42,9 @@ class DocumentRepositoryTest {
 
         //when
         documentRepositoryTest.deleteByDocumentId(uuid);
-        Optional<Document> expected = documentRepositoryTest.findByDocumentId(uuid);
+        Document expected = documentRepositoryTest.findByDocumentId(uuid);
         //then
-        assertThat(Optional.empty()).isEqualTo(expected);
+        assertThat(expected).isNull();
     }
 
 }

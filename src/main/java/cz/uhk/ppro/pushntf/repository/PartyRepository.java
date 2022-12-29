@@ -9,7 +9,7 @@ import java.util.Optional;
 
 @Repository
 public interface PartyRepository extends JpaRepository<Party, Long> {
-    Optional<Party> findByPartyId(String uuid);
+    Party findByPartyId(String uuid);
 
     @Transactional
     long deleteByPartyId(String uuid);

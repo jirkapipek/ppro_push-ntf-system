@@ -9,7 +9,7 @@ import java.util.Optional;
 
 @Repository
 public interface InvestmentRepository extends JpaRepository<Investment, Long> {
-    Optional<Investment> findByInvestmentId(String uuid);
+    Investment findByInvestmentId(String uuid);
 
     @Transactional
     long deleteByInvestmentId(String uuid);

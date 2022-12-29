@@ -9,7 +9,7 @@ import java.util.Optional;
 
 @Repository
 public interface DocumentRepository extends JpaRepository<Document, Long> {
-    Optional<Document> findByDocumentId(String uuid);
+    Document findByDocumentId(String uuid);
 
     @Transactional
     long deleteByDocumentId(String uuid);
