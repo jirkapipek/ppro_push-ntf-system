@@ -1,5 +1,6 @@
 sleep 30s
-curl -X PUT -H "Content-Type: application/JSON" --data '{
+
+curl -X POST -H "Content-Type: application/JSON" --data '{"name": "cdc-connector", "config": {
   "connector.class": "io.debezium.connector.postgresql.PostgresConnector",
   "slot.name": "debezium_json",
   "database.user": "postgres",
@@ -14,7 +15,7 @@ curl -X PUT -H "Content-Type: application/JSON" --data '{
   "key.converter": "org.apache.kafka.connect.json.JsonConverter",
   "value.converter": "org.apache.kafka.connect.json.JsonConverter",
   "table.include.list": "ppro.party,ppro.document,ppro.investment,ppro.product",
-  "topic.prefix": "push-ntf"
-}}}' http://connect:8083/connectors/cdc-connector/config
+  "topic.prefix": "postgres"
+}}}' http://connect:8083/connectors/
 
 exit

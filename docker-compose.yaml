@@ -104,10 +104,10 @@ services:
       kafka-topics --bootstrap-server broker:29092 --list
 
       echo -e 'Creating kafka topics'
-      kafka-topics --bootstrap-server broker:29092 --create --if-not-exists --partitions 1 --replication-factor 1 --topic push-ntf.ppro.party
-      kafka-topics --bootstrap-server broker:29092 --create --if-not-exists --partitions 1 --replication-factor 1 --topic push-ntf.ppro.document
-      kafka-topics --bootstrap-server broker:29092 --create --if-not-exists --partitions 1 --replication-factor 1 --topic push-ntf.ppro.investment
-      kafka-topics --bootstrap-server broker:29092 --create --if-not-exists --partitions 1 --replication-factor 1 --topic push-ntf.ppro.product
+      kafka-topics --bootstrap-server broker:29092 --create --if-not-exists --partitions 1 --replication-factor 1 --topic postgres.ppro.party
+      kafka-topics --bootstrap-server broker:29092 --create --if-not-exists --partitions 1 --replication-factor 1 --topic postgres.ppro.document
+      kafka-topics --bootstrap-server broker:29092 --create --if-not-exists --partitions 1 --replication-factor 1 --topic postgres.ppro.investment
+      kafka-topics --bootstrap-server broker:29092 --create --if-not-exists --partitions 1 --replication-factor 1 --topic postgres.ppro.product
      
       echo -e 'Successfully created the following topics:'
       kafka-topics --bootstrap-server broker:29092 --list
