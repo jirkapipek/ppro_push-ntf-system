@@ -19,7 +19,7 @@ class InvestmentRepositoryTest {
 
     @Test
     void isShouldFindInvestmentByInvestmentId() {
-        //give
+        //given
         String uuid = "5567d933-5d2a-46e3-a58e-34d614e9bdeb";
         Investment investment = new Investment(uuid, Investment.Category.CRYPTOCURRENCIES, "Bitcoin",255.55, "EUR", 34000.5,"CZK",LocalDateTime.now(), LocalDateTime.now());
 

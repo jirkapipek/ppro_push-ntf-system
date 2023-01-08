@@ -2,11 +2,13 @@ package cz.uhk.ppro.pushntf.service;
 
 import cz.uhk.ppro.pushntf.model.Product;
 import cz.uhk.ppro.pushntf.repository.ProductRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@AllArgsConstructor
 @Service
 public class ProductService implements BaseEntityService<Product> {
 

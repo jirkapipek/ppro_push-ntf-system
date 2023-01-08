@@ -16,10 +16,10 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.Collection;
-
 @Tag(name = "document", description = "API for Document")
 @RequestMapping("/api/documents")
 public interface DocumentApi {
+
 
     @Operation(summary = "Find document by UUID", description = "Returns a single document", tags = {"document"})
     @ApiResponses(value = {

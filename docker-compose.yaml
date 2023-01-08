@@ -92,6 +92,26 @@ services:
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
     ports:
       - 8081:80
+  init-kafka-topics:
+    image: confluentinc/cp-kafka:latest
+    container_name: init-kafka-topics
+    depends_on:
+      - broker
+    entrypoint: [ '/bin/sh', '-c' ]
+    command: |
+      "
+      # blocks until kafka is reachable
+      kafka-topics --bootstrap-server broker:29092 --list
+
+      echo -e 'Creating kafka topics'
+      kafka-topics --bootstrap-server broker:29092 --create --if-not-exists --partitions 1 --replication-factor 1 --topic push-ntf.ppro.party
+      kafka-topics --bootstrap-server broker:29092 --create --if-not-exists --partitions 1 --replication-factor 1 --topic push-ntf.ppro.document
+      kafka-topics --bootstrap-server broker:29092 --create --if-not-exists --partitions 1 --replication-factor 1 --topic push-ntf.ppro.investment
+      kafka-topics --bootstrap-server broker:29092 --create --if-not-exists --partitions 1 --replication-factor 1 --topic push-ntf.ppro.product
+     
+      echo -e 'Successfully created the following topics:'
+      kafka-topics --bootstrap-server broker:29092 --list
+      "
   push-ntf-system:
     container_name: pushNtfSystem
     hostname: push-ntf-system
